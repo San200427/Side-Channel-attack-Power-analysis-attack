@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Analysis Attack Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .result-container {
+            text-align: center;
+        }
+        .result-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Power Analysis Attack Simulation</h1>
+    <div class="form-container">
+        <form action="/" method="POST">
+            <label for="key">Enter Secret Key (space-separated bytes, or leave empty for random):</label>
+            <input type="text" id="key" name="key" value="{{ key or '' }}">
+            
+            <label for="num_traces">Number of Power Traces to Generate:</label>
+            <input type="number" id="num_traces" name="num_traces" value="{{ num_traces or 100 }}">
+
+            <button type="submit">Start Simulation</button>
+        </form>
+    </div>
+
+    {% if plot_img %}
+    <div class="result-container">
+        <h2>Simulation Results</h2>
+        <h3>Estimated Power Consumption per Byte Position:</h3>
+        <ul>
+            {% for avg in average_consumption %}
+            <li>Byte {{ loop.index }}: {{ avg | round(2) }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Power Traces Plot:</h3>
+        <img src="data:image/png;base64,{{ plot_img }}" alt="Power Traces">
+    </div>
+    {% endif %}
+</body>
+</html>
